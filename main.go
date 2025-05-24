@@ -28,9 +28,9 @@ func main() {
 	fillRemainingAvailableGalaxies()
 	drawLines()
 
-	fmt.Println(availableSpaces)
-	fmt.Println(galaxies)
-	fmt.Println(lines)
+	fmt.Printf("Available Spaces (should be empty): %v\n", availableSpaces)
+	fmt.Printf("Galaxies: %v\n", galaxies)
+	fmt.Printf("Puzzles lines: %v\n", lines)
 }
 
 func initStartingValues() {
@@ -166,9 +166,6 @@ func startGalaxy(center structs.Cell) (structs.Galaxy, error) {
 		break
 	}
 
-	fmt.Println("Type", galaxyType)
-	fmt.Println("Near cells:", nearCells)
-
 	for _, cellOffset := range nearCells {
 		targetCell := structs.Cell{
 			X: galaxy.Center.Cell.X + cellOffset.X,
@@ -212,10 +209,7 @@ func searchBoard(current, center structs.Cell, galaxy structs.Galaxy, count int)
 			Y: current.Y + adjacent[k].Y,
 		}
 
-		fmt.Println("Checking adjacent", center, current, newCell)
-
 		if isValidSpace(newCell, center) {
-			fmt.Println("Is valid?")
 			mirrored := getMirroredCoordinates(newCell, center)
 			// TODO: This is not updating the galaxy inside the galaxies struct
 			galaxies.AddCell(galaxy, newCell)
