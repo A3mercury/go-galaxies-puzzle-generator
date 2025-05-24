@@ -74,18 +74,18 @@ func chooseFromAvailableSpaces() {
 
 func unsetFromAvailableSpaces(cell structs.Cell) {
 	if _, found := availableSpaces.FindSpace(cell); !found {
-		log.Fatalf("There was a problem finding cell in availableSpaces: %s", cell)
+		log.Fatalf("There was a problem finding cell in availableSpaces: %v", cell)
 		return
 	}
 	offset, err := getOffsetsFromCurrent(cell)
 	if err != nil {
-		log.Fatalf("There was a problem getting offset from current cell: %s %v", cell, err)
+		log.Fatalf("There was a problem getting offset from current cell: %v %v", cell, err)
 		return
 	}
 
 	for x := cell.X - offset.X; x <= cell.X+offset.X; x++ {
 		for y := cell.Y - offset.Y; y <= cell.Y+offset.Y; y++ {
-			if removed := availableSpaces.RemoveSpace(structs.Cell{X: x, Y: y}); !removed {
+			if !availableSpaces.RemoveSpace(structs.Cell{X: x, Y: y}) {
 				continue
 			}
 		}
@@ -95,7 +95,7 @@ func unsetFromAvailableSpaces(cell structs.Cell) {
 func getOffsetsFromCurrent(current structs.Cell) (structs.Cell, error) {
 	currentType, err := getCenterType(current)
 	if err != nil {
-		log.Fatalf("There was a problem getting this cell's center type: %s %v", current, err)
+		log.Fatalf("There was a problem getting this cell's center type: %v %v", current, err)
 		var cell structs.Cell
 		return cell, err
 	}
@@ -110,7 +110,7 @@ func getOffsetsFromCurrent(current structs.Cell) (structs.Cell, error) {
 		return structs.Cell{X: 2, Y: 2}, nil
 	default:
 		var cell structs.Cell
-		return cell, fmt.Errorf("something went wrong getting offets from current: %s", current)
+		return cell, fmt.Errorf("something went wrong getting offets from current: %v", current)
 	}
 }
 
@@ -125,14 +125,14 @@ func getCenterType(cell structs.Cell) (string, error) {
 	case cell.X%2 != 0 && cell.Y%2 != 0:
 		return CROSS, nil
 	default:
-		return "", fmt.Errorf("something went wrong getting center: %s", cell)
+		return "", fmt.Errorf("something went wrong getting center: %v", cell)
 	}
 }
 
 func startGalaxy(center structs.Cell) (structs.Galaxy, error) {
 	galaxyType, err := getCenterType(center)
 	if err != nil {
-		log.Fatalf("There was a problem starting the Galaxy: %s %v", center, err)
+		log.Fatalf("There was a problem starting the Galaxy: %v %v", center, err)
 		var g structs.Galaxy
 		return g, err
 	}
@@ -200,7 +200,7 @@ func searchBoard(current, center structs.Cell, galaxy structs.Galaxy, count int)
 	if center == current {
 		centerType, err = getCenterType(center)
 		if err != nil {
-			log.Fatalf("There was a problem getting the center type: %s %v", center, err)
+			log.Fatalf("There was a problem getting the center type: %v %v", center, err)
 			return
 		}
 	}
