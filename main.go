@@ -19,8 +19,15 @@ var width, height, startingCenterCount int
 var availableSpaces structs.AvailableSpaces
 var galaxies structs.Galaxies
 var lines structs.Lines
+var centers structs.Centers
 
 func main() {
+	for range 100 {
+		generate()
+	}
+}
+
+func generate() {
 	initStartingValues()
 	initAvailableSpaces()
 	selectStartingCenters()
@@ -37,6 +44,10 @@ func initStartingValues() {
 	width = 5
 	height = 5
 	startingCenterCount = 3
+	availableSpaces = structs.AvailableSpaces{}
+	galaxies = structs.Galaxies{}
+	lines = structs.Lines{}
+	centers = structs.Centers{}
 }
 
 func initAvailableSpaces() {
@@ -136,16 +147,20 @@ func startGalaxy(center structs.Cell) (structs.Galaxy, error) {
 		var g structs.Galaxy
 		return g, err
 	}
-	galaxy := structs.Galaxy{
-		Center: structs.Center{
-			Type: galaxyType,
-			Cell: structs.Cell{
-				X: center.X,
-				Y: center.Y,
-			},
+	newCenter := structs.Center{
+		Type: galaxyType,
+		Cell: structs.Cell{
+			X: center.X,
+			Y: center.Y,
 		},
+	}
+
+	galaxy := structs.Galaxy{
+		Center:   newCenter,
 		Complete: false,
 	}
+
+	centers.Centers = append(centers.Centers, newCenter)
 
 	var nearCells []structs.Cell
 	switch galaxyType {
